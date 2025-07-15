@@ -12,12 +12,15 @@ export default function EditTodoPage() {
   const [status, setStatus] = useState('pending');
   const [dueDate, setDueDate] = useState('');
   const [error, setError] = useState('');
-
+  const [loading, setLoading] = useState(true); // NEW
+    
   useEffect(() => {
-    const access = typeof window !== 'undefined' ? localStorage.getItem('access') : null;
+    const access = document.cookie.match(/(^| )access=([^;]+)/);
     if (!access) {
       router.replace('/login');
       return;
+    } else {
+      setLoading(false); // ✅ Allow component to render when token exists
     }
     if (id) {
       getTodoById(id).then(todo => {
@@ -28,7 +31,7 @@ export default function EditTodoPage() {
       });
     }
   }, [id, router]);
-
+  if (loading) return null;
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {

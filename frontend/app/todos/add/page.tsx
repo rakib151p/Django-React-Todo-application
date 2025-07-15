@@ -1,7 +1,9 @@
 'use client';
+// import Cookies from 'js-cookie'; // Add this at the top
 import React, { useEffect, useState } from 'react';
 import { addTodo } from '../../api/api';
 import { useRouter } from 'next/navigation';
+
 
 export default function AddTodoPage() {
   const [title, setTitle] = useState('');
@@ -10,17 +12,33 @@ export default function AddTodoPage() {
   const [dueDate, setDueDate] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
-
+  const [loading, setLoading] = useState(true); // NEW
   useEffect(() => {
-    const access = typeof window !== 'undefined' ? localStorage.getItem('access') : null;
+    // const access = typeof window !== 'undefined' ? localStorage.getItem('access') : null;
+    const access = document.cookie.match(/(^| )access=([^;]+)/);
+    // const access = localStorage.getItem('access');
+    console.log('Access Token:', access);
     if (!access) {
       router.replace('/login');
+    } else {
+      setLoading(false); // ✅ Allow component to render when token exists
     }
   }, [router]);
+  //   useEffect(() => {
+  //   const access = localStorage.getItem('access');
+  //   console.log('Access Token:', access);
+  //   if (!access) {
+  //     router.replace('/login');
+  //   } else {
+  //     setLoading(false); // ✅ Allow rendering after auth check
+  //   }
+  // }, [router]);
+  if (loading) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      console.log('Adding Todo:', { title, description, status, due_date: dueDate });
       await addTodo({ title, description, status, due_date: dueDate });
       router.push('/todos');
     } catch {
