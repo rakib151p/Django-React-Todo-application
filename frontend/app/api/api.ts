@@ -42,11 +42,19 @@ export const getTodoById = async (id: number) => {
   return res.data;
 };
 
-export const addTodo = async (todo: any) => {
+export interface Todo {
+  id?: number;
+  title: string;
+  description?: string;
+  status?: string;
+  due_date: string;
+}
+
+export const addTodo = async (todo: Todo) => {
   await axios.post(`${BASE_URL}/api/auth/todo/`, todo, { headers: getAuthHeaders() });
 };
 
-export const updateTodo = async (id: number, todo: any) => {
+export const updateTodo = async (id: number, todo: Todo) => {
   await axios.put(`${BASE_URL}/api/auth/todo/${id}/`, todo, { headers: getAuthHeaders() });
 };
 
