@@ -6,12 +6,14 @@ from rest_framework.decorators import api_view
 from rest_framework import serializers
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken,AccessToken
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer,LoginSerializer,UserSerializer,TodoSerializer
 from .models import Task
+from django.utils import timezone
+
 class RegisterView(generics.CreateAPIView):
     queryset=User.objects.all()
     permission_classes=(AllowAny,)
@@ -26,12 +28,31 @@ class LoginView(generics.GenericAPIView):
         if user:
             # User is authenticated
             refresh=RefreshToken.for_user(user)
+            access = AccessToken.for_user(user)
             user_serializer=UserSerializer(user)
-            return Response({
+            
+            res = Response({
                 'refresh': str(refresh),
-                'access': str(refresh.access_token),
+                'access': str(access),
                 'user':user_serializer.data
             })
+            res.set_cookie(
+                key='refresh_token',
+                value=str(refresh),
+                httponly=True,
+                secure=True,             # Set True in production with HTTPS
+                samesite='strict',          # Or 'Strict' or 'None' depending on use case
+                expires=timezone.now() + refresh.lifetime  # Expiry matches token
+            )
+            res.set_cookie(
+                key='access_token',
+                value=str(access),
+                httponly=True,
+                secure=True,             # Set True in production with HTTPS
+                samesite='strict',          # Or 'Strict' or 'None' depending on use case
+                expires=timezone.now() + access.lifetime  # Expiry matches token
+            )
+            return res
         else:
             return Response({'details': 'Invalid user.'},status=401)
             
@@ -47,7 +68,7 @@ class DashboardView(APIView):
         
 class TaskView(APIView):
     permission_classes = [IsAuthenticated]
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_object(self, pk):
         try:
@@ -70,9 +91,23 @@ class TaskView(APIView):
 
     def post(self, request):
         """Create a new task"""
+        # Get access token from Authorization header
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return Response({'detail': 'Authorization header missing or invalid.'}, status=401)
+        access_token = auth_header.split(' ')[1]
+        try:
+            from rest_framework_simplejwt.tokens import AccessToken
+            token = AccessToken(access_token)
+            user_id = token['user_id']
+            from django.contrib.auth import get_user_model
+            User = get_user_model()
+            user = User.objects.get(id=user_id)
+        except Exception:
+            return Response({'detail': 'Invalid or expired token.'}, status=401)
         serializer = TodoSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=request.user)  # assuming Task has user field
+            serializer.save(user=user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=400)
 
@@ -81,9 +116,11 @@ class TaskView(APIView):
         task = self.get_object(pk)
         if not task:
             return Response({"error": "Task not found"}, status=404)
-        serializer = TodoSerializer(task, data=request.data)
+        if task.user != request.user:
+            return Response({"error": "You do not have permission to update this task."}, status=403)
+        serializer = TodoSerializer(task, data=request.data, partial=True)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=task.user)
             return Response(serializer.data)
         return Response(serializer.errors, status=400)
 
@@ -92,5 +129,7 @@ class TaskView(APIView):
         task = self.get_object(pk)
         if not task:
             return Response({"error": "Task not found"}, status=404)
+        if task.user != request.user:
+            return Response({"error": "You do not have permission to delete this task."}, status=403)
         task.delete()
         return Response({"message": "Task deleted"}, status=204)

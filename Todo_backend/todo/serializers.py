@@ -22,9 +22,11 @@ class LoginSerializer(serializers.Serializer):
     username=serializers.CharField(required=True)
     password=serializers.CharField(required=True,write_only=True)
     
-class TodoSerializer(serializers.Serializer):
+class TodoSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
-        model=Task
-        fields= '__all__'
-        
-    
+        model = Task
+        fields = '__all__'
+    def create(self, validated_data):
+        return Task.objects.create(**validated_data)
+
