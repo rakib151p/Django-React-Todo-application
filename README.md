@@ -163,3 +163,28 @@ Todo Endpoints (Protected) <br>
 <pre> {
   "error": "Task not found"
 } </pre>
+
+# Website preview
+### Login Page
+![Login](site_images/login.png)
+
+### Signup Page
+![Signup](site_images/signup.png)
+
+### Todo List
+![Todo List](site_images/todo.png)
+
+### Add Todo Page
+![Add Todo](site_images/add_todo.png)
+
+### Todo list (after adding a task)
+![Dashboard](site_images/dashboard.png)
+
+### Details Page
+![Details](site_images/details.png)
+
+### Edit Page
+![Edit](site_images/edit.png)
+
+# Watch a demo on youtube
+https://youtu.be/g3JYi7Ecd04
