@@ -20,7 +20,7 @@ export default function EditTodoPage() {
       router.replace('/login');
       return;
     } else {
-      setLoading(false); // ✅ Allow component to render when token exists
+      setLoading(false);
     }
     if (id) {
       getTodoById(id).then(todo => {

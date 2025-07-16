@@ -7,7 +7,7 @@ export default async function Home() {
   const access = cookieStore.get('access');
 
   if (access && access.value) {
-    redirect('/todo');
+    redirect('/todos');
   } else {
     redirect('/login');
   }
