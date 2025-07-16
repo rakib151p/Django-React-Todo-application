@@ -9,11 +9,12 @@ This is a assignment task for Gigatech Apprentice – Software Development Posit
 **CORS Handling:** django-cors-headers<br>
 **Database:** SQLite <br>
 
-# API Documentation
 Base URL: https://django-react-todo-application.onrender.com/api/auth (Backend)<br>
 Site URL: https://django-react-todo-application.vercel.app/login (Frontend)<br>
 
 ## 🌐 [Live Website - Click here to visit the live site](https://django-react-todo-application.vercel.app/login)<br>
+
+# API Documentation
 
 ## 1. Register a New User <br>
 **URL**: /register/ <br>
