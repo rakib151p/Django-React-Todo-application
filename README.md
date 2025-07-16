@@ -1,8 +1,19 @@
 # Django-React-Todo-application
-This is a assignment task for Gigatech Apprentice – Software Development Position
+This is a assignment task for Gigatech Apprentice – Software Development Position <br>
+
+# Technology Stack overview
+**Backend:** Django <br>
+**Frontend:** ReactJS<br>
+**API:** Django REST Framework <br>
+**Authentication:** JWT-based using djangorestframework-simplejwt<br>
+**CORS Handling:** django-cors-headers<br>
+**Database:** SQLite <br>
 
 # API Documentation
-Base URL: http://127.0.0.1:8000/api/auth/
+Base URL: https://django-react-todo-application.onrender.com/api/auth (Backend)
+Site URL: https://django-react-todo-application.vercel.app/login (Frontend)<br>
+
+## 🌐 [Live Website - Click here to visit the live site](https://django-react-todo-application.vercel.app/login)<br>
 
 ## 1. Register a New User <br>
 **URL**: /register/ <br>
@@ -187,8 +198,5 @@ Todo Endpoints (Protected) <br>
 ![Edit](site_images/edit.png)
 
 # Watch a demo on youtube
-<<<<<<< HEAD
 https://youtu.be/g3JYi7Ecd04
-=======
-https://youtu.be/g3JYi7Ecd04
->>>>>>> 55e72b11a08adc1cac5c5842534a92c3a6971c82
+
