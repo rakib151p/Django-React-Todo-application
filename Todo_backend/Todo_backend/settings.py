@@ -25,9 +25,11 @@ SECRET_KEY = "django-insecure-$h(c=vxp&(gct0oj)r3g2gvehb2vxpwa(4$!-@#@q@f&tfuem9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
+ALLOWED_HOSTS = [
+    'django-react-todo-application.onrender.com',  # your Render URL
+    'localhost',
+    '127.0.0.1',
+]
 # Application definition
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
