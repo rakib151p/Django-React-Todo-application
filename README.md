@@ -6,8 +6,8 @@ Base URL: http://127.0.0.1:8000/api/auth/
 
 1. Register a New User
 
-URL: /register/
-Method: POST
+**URL:** /register/
+**Method:** POST
 Authentication: Not Required
 Description: Registers a new user account
 
