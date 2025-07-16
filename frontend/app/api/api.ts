@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // const BASE_URL = 'http://127.0.0.1:8000';
-const BASE_URL = 'http://40.81.16.202:8000/';
+// const BASE_URL = 'http://40.81.16.202:8000/';
+const BASE_URL = 'https://django-react-todo-application.onrender.com';
 
 function setCookie(name: string, value: string, days = 7) {
   const expires = new Date(Date.now() + days * 864e5).toUTCString();
