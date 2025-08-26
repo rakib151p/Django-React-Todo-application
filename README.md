@@ -1,5 +1,5 @@
 # Django-React-Todo-application
-This is a assignment task for Gigatech Apprentice – Software Development Position <br>
+This is a Basic To-Do application developed using Django rest framework and React <br>
 
 # Technology Stack overview
 **Backend:** Django <br>
